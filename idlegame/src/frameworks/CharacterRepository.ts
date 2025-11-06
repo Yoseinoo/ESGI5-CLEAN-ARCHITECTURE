@@ -33,4 +33,11 @@ export class CharacterRepository {
         }
         return char;
     }
+
+    async resetCharacter(): Promise<Character> {
+        // Create a fresh character with default stats
+        const char = new Character(1, "Knight"); // Level 1, default attack, default gold
+        await this.saveCharacter(char); // save it to DB
+        return char;
+    }
 }

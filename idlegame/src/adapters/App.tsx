@@ -5,11 +5,13 @@ import { SpawnEnemy } from "../app/usecases/SpawnEnemy";
 import { UpgradeCharacter } from "../app/usecases/UpgradeCharacter";
 import { Character } from "../domain/Character";
 import { Enemy } from "../domain/Enemy";
+import { ResetCharacter } from "../app/usecases/ResetCharacter";
 
 const repo = new CharacterRepository();
 const fightUseCase = new FightEnemy(repo);
 const spawnEnemyUseCase = new SpawnEnemy();
 const upgradeUseCase = new UpgradeCharacter(repo);
+const resetUseCase = new ResetCharacter(repo);
 
 export default function App() {
     const [character, setCharacter] = useState<Character | null>(null);
@@ -36,6 +38,13 @@ export default function App() {
             setEnemy(await spawnEnemyUseCase.execute()); // 👈 new monster every win
         } else {
             setLog(`❌ You lost against ${enemy.name}...`);
+
+            // RESET CHARACTER
+            const reset = await resetUseCase.execute();
+            setCharacter(reset.character);
+
+            // Spawn a new enemy after reset
+            setEnemy(await spawnEnemyUseCase.execute());
         }
     };
 
