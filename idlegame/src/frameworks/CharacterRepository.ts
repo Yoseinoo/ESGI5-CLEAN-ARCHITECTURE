@@ -2,9 +2,8 @@ import { db, CharacterRecord } from "./db";
 import { Character } from "../domain/Character";
 
 export class CharacterRepository {
-    /*
     async getCharacter(id: number): Promise<Character | null> {
-        const data: CharacterRecord | undefined = await db.characters.get(id);
+        const data = await db.characters.get(id);
         if (!data) return null;
         return new Character(
             data.id!,
@@ -34,5 +33,4 @@ export class CharacterRepository {
         }
         return char;
     }
-        */
 }
