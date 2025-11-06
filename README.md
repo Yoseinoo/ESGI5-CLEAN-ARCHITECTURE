@@ -10,7 +10,7 @@ Le jeu fonctionne **sans backend**, avec stockage local dans le navigateur (**In
 src/  
 ├── domain/ → logique métier (Héros, Ennemis, Combat)  
 ├── application/ → use cases (Combattre, Spawn ennemis, Upgrades)  
-├── frameworks/ → API externe + base de données (Dexie, D&D API)  
+├── frameworks/ → API externe + base de données (Dexie, D&D API → https://5e-bits.github.io/docs)  
 ├── adapters/ → Interface (React)  
 
 ---
