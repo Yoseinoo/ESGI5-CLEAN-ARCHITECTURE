@@ -3,7 +3,7 @@ export class Character {
         public id: number,
         public name: string,
         public level: number = 1,
-        public attack: number = 10,
+        public attack: number = 30,
         public gold: number = 0
     ) {}
 
@@ -12,7 +12,7 @@ export class Character {
         if (this.gold < cost) return false;
         this.gold -= cost;
         this.level += 1;
-        this.attack += 5;
+        this.attack += 20;
         return true;
     }
 }

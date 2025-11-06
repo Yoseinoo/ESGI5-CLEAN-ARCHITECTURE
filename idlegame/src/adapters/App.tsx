@@ -6,10 +6,12 @@ import { UpgradeCharacter } from "../app/usecases/UpgradeCharacter";
 import { Character } from "../domain/Character";
 import { Enemy } from "../domain/Enemy";
 import { ResetCharacter } from "../app/usecases/ResetCharacter";
+import { GameProgress } from "../app/usecases/GameProgress";
 
 const repo = new CharacterRepository();
 const fightUseCase = new FightEnemy(repo);
-const spawnEnemyUseCase = new SpawnEnemy();
+const gameProgress = new GameProgress();
+const spawnEnemyUseCase = new SpawnEnemy(gameProgress);
 const upgradeUseCase = new UpgradeCharacter(repo);
 const resetUseCase = new ResetCharacter(repo);
 
@@ -44,6 +46,7 @@ export default function App() {
             setCharacter(reset.character);
 
             // Spawn a new enemy after reset
+            spawnEnemyUseCase.reset(); // rounds & challenge rating reset
             setEnemy(await spawnEnemyUseCase.execute());
         }
     };
