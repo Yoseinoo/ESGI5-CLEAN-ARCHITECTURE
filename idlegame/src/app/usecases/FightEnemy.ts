@@ -11,8 +11,10 @@ export class FightEnemy {
     ): Promise<{ win: boolean; earned: number; character: Character }> {
         const character = await this.characterRepo.getCharacter(1);
         if (!character) throw new Error("Character not found");
+
         const result = Battle.fight(character, enemy);
         await this.characterRepo.saveCharacter(character);
+
         return { ...result, character };
     }
 }

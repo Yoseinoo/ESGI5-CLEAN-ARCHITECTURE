@@ -1,66 +1,84 @@
 import { useEffect, useState } from "react";
 import { CharacterRepository } from "../frameworks/CharacterRepository";
 import { FightEnemy } from "../app/usecases/FightEnemy";
+import { SpawnEnemy } from "../app/usecases/SpawnEnemy";
 import { UpgradeCharacter } from "../app/usecases/UpgradeCharacter";
-import { GetCharacter } from "../app/usecases/GetCharacter";
-import { Enemy } from "../domain/Enemy";
 import { Character } from "../domain/Character";
+import { Enemy } from "../domain/Enemy";
 
 const repo = new CharacterRepository();
 const fightUseCase = new FightEnemy(repo);
+const spawnEnemyUseCase = new SpawnEnemy();
 const upgradeUseCase = new UpgradeCharacter(repo);
-const getCharUseCase = new GetCharacter(repo);
 
 export default function App() {
     const [character, setCharacter] = useState<Character | null>(null);
-    const [log, setLog] = useState<string>("");
+    const [enemy, setEnemy] = useState<Enemy | null>(null);
+    const [log, setLog] = useState("");
 
     useEffect(() => {
         async function init() {
             const char = await repo.initDefaultCharacter();
             setCharacter(char);
+            setEnemy(await spawnEnemyUseCase.execute());
         }
         init();
     }, []);
 
     const fight = async () => {
-        const enemy = new Enemy(1, "Slime", 8, 5);
+        if (!enemy) return;
+
         const result = await fightUseCase.execute(enemy);
         setCharacter(result.character);
-        setLog(result.win ? `Victory! +${result.earned} gold` : "Defeat...");
+
+        if (result.win) {
+            setLog(`✅ Defeated ${enemy.name}! +${result.earned} gold`);
+            setEnemy(await spawnEnemyUseCase.execute()); // 👈 new monster every win
+        } else {
+            setLog(`❌ You lost against ${enemy.name}...`);
+        }
     };
 
     const upgrade = async () => {
         const result = await upgradeUseCase.execute();
         setCharacter(result.character);
-        setLog(result.success ? "Upgrade successful!" : "Not enough gold");
+        setLog(
+            result.success ? "⚡ Upgrade successful!" : "❗ Not enough gold"
+        );
     };
 
-    if (!character) return <p>Loading...</p>;
+    if (!character || !enemy) return <p>Loading...</p>;
 
     return (
-        <div className="max-w-md mx-auto mt-10 space-y-4 p-4 border rounded-lg shadow-lg">
-            <h1 className="text-2xl font-bold">{character.name}</h1>
+        <div className="max-w-md mx-auto mt-10 p-4 border rounded-lg shadow-lg space-y-4">
+            <h1 className="text-2xl font-bold">⚔ Hero: {character.name}</h1>
             <p>Level: {character.level}</p>
             <p>Attack: {character.attack}</p>
             <p>Gold: {character.gold}</p>
 
+            <hr />
+
+            <h2 className="text-xl font-bold">👹 Enemy: {enemy.name}</h2>
+            <p>HP: {enemy.hp}</p>
+            <p>Attack: {enemy.attack}</p>
+            <p>Reward: {enemy.reward} gold</p>
+
             <div className="flex gap-2">
                 <button
-                    className="px-4 py-2 bg-green-500 text-white rounded"
+                    className="px-4 py-2 bg-red-500 text-white rounded"
                     onClick={fight}
                 >
-                    ⚔️ Fight Slime
+                    ⚔ Fight
                 </button>
                 <button
                     className="px-4 py-2 bg-blue-500 text-white rounded"
                     onClick={upgrade}
                 >
-                    ⬆️ Upgrade
+                    ⬆ Upgrade
                 </button>
             </div>
 
-            {log && <p className="mt-2 text-center font-semibold">{log}</p>}
+            {log && <p className="font-semibold text-center">{log}</p>}
         </div>
     );
 }

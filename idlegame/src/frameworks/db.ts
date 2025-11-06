@@ -1,6 +1,5 @@
 // src/frameworks/db.ts
 import Dexie, { Table } from "dexie";
-import { Character } from "../domain/Character";
 
 export interface CharacterRecord {
     id?: number;
