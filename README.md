@@ -7,11 +7,11 @@ Le jeu fonctionne **sans backend**, avec stockage local dans le navigateur (**In
 
 ## 🧩 Structure du projet
 
-src/
-├── domain/ → logique métier (Héros, Ennemis, Combat)
-├── application/ → use cases (Combattre, Spawn ennemis, Upgrades)
-├── frameworks/ → API externe + base de données (Dexie, D&D API)
-├── adapters/ → Interface (React)
+src/  
+├── domain/ → logique métier (Héros, Ennemis, Combat)  
+├── application/ → use cases (Combattre, Spawn ennemis, Upgrades)  
+├── frameworks/ → API externe + base de données (Dexie, D&D API)  
+├── adapters/ → Interface (React)  
 
 ---
 
