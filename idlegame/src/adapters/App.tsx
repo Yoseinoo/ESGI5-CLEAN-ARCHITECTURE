@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CharacterRepository } from "../frameworks/CharacterRepository";
 import { FightEnemy } from "../app/usecases/FightEnemy";
 import { SpawnEnemy } from "../app/usecases/SpawnEnemy";
@@ -23,6 +23,8 @@ export default function App() {
     const [character, setCharacter] = useState<Character | null>(null);
     const [enemy, setEnemy] = useState<Enemy | null>(null);
     const [log, setLog] = useState("");
+    const [isIdle, setIsIdle] = useState(false);
+    const [speed, setSpeed] = useState(2000); // 2 seconds per fight
 
     useEffect(() => {
         async function init() {
@@ -33,7 +35,7 @@ export default function App() {
         init();
     }, []);
 
-    const fight = async () => {
+    const processFight = useCallback(async () => {
         if (!enemy) return;
 
         const result = await fightUseCase.execute(enemy);
@@ -53,7 +55,7 @@ export default function App() {
             spawnEnemyUseCase.reset(); // rounds & challenge rating reset
             setEnemy(await spawnEnemyUseCase.execute());
         }
-    };
+    }, [enemy]);
 
     const upgrade = async () => {
         const result = await upgradeUseCase.execute();
@@ -62,6 +64,16 @@ export default function App() {
             result.success ? "⚡ Upgrade successful!" : "❗ Not enough gold"
         );
     };
+
+    useEffect(() => {
+        if (!isIdle) return;
+
+        const interval = setInterval(() => {
+            processFight();
+        }, speed);
+
+        return () => clearInterval(interval); // cleanup when idle stops or component unloads
+    }, [isIdle, speed, processFight]);
 
     if (!character || !enemy) return <p>Loading...</p>;
 
@@ -82,16 +94,37 @@ export default function App() {
             <div className="flex gap-2">
                 <button
                     className="px-4 py-2 bg-red-500 text-white rounded"
-                    onClick={fight}
+                    onClick={processFight}
                 >
                     ⚔ Fight
                 </button>
                 <button
                     className="px-4 py-2 bg-blue-500 text-white rounded"
                     onClick={upgrade}
+                    disabled={character.gold < character.getUpgradeCost()}
                 >
-                    ⬆ Upgrade
+                    ⬆ Upgrade ({character.getUpgradeCost()} gold)
                 </button>
+            </div>
+
+            <div className="flex gap-2 items-center">
+                <button
+                    className="px-4 py-2 bg-green-600 text-white rounded"
+                    onClick={() => setIsIdle(!isIdle)}
+                >
+                    {isIdle ? "⏸ Stop Auto-Fight" : "▶ Start Auto-Fight"}
+                </button>
+
+                <select
+                    className="border p-2 rounded"
+                    value={speed}
+                    onChange={(e) => setSpeed(Number(e.target.value))}
+                >
+                    <option value={3000}>3s / fight</option>
+                    <option value={2000}>2s / fight</option>
+                    <option value={1000}>1s / fight</option>
+                    <option value={500}>0.5s / fight</option>
+                </select>
             </div>
 
             {log && <p className="font-semibold text-center">{log}</p>}

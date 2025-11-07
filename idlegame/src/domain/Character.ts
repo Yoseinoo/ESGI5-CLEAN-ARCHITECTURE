@@ -15,4 +15,8 @@ export class Character {
         this.attack += 20;
         return true;
     }
+
+    getUpgradeCost(): number {
+        return this.level * 10;
+    }
 }
