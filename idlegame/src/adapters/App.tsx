@@ -7,11 +7,13 @@ import { Character } from "../domain/Character";
 import { Enemy } from "../domain/Enemy";
 import { ResetCharacter } from "../app/usecases/ResetCharacter";
 import { GameProgress } from "../app/usecases/GameProgress";
+import { MonsterApiRepository } from "../frameworks/api/MonsterApi";
 
 const repo = new CharacterRepository();
+const monsterRepo = new MonsterApiRepository();
 const fightUseCase = new FightEnemy(repo);
 const gameProgress = new GameProgress();
-const spawnEnemyUseCase = new SpawnEnemy(gameProgress);
+const spawnEnemyUseCase = new SpawnEnemy(monsterRepo, gameProgress);
 const upgradeUseCase = new UpgradeCharacter(repo);
 const resetUseCase = new ResetCharacter(repo);
 

@@ -1,15 +1,18 @@
-import { clearMonsterCache, fetchRandomMonster } from "../../frameworks/api/MonsterApi";
 import { Enemy } from "../../domain/Enemy";
 import { GameProgress } from "./GameProgress";
+import { IMonsterRepository } from "../ports/MonsterRepository";
 
 export class SpawnEnemy {
-    constructor(private gameProgress: GameProgress) {}
+    constructor(
+        private monsterRepo: IMonsterRepository,
+        private gameProgress: GameProgress
+    ) {}
 
     async execute(): Promise<Enemy> {
         this.gameProgress.nextRound();
         const challengeRating = this.gameProgress.getChallengeRating();
 
-        const monsterDTO = await fetchRandomMonster(challengeRating);
+        const monsterDTO = await this.monsterRepo.fetchRandomMonster(challengeRating);
 
         return new Enemy(
             Date.now(),
@@ -22,6 +25,6 @@ export class SpawnEnemy {
 
     reset() {
         this.gameProgress.reset();
-        clearMonsterCache();
+        this.monsterRepo.clearMonsterCache();
     }
 }

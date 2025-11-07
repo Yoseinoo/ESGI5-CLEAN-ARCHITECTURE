@@ -1,10 +1,10 @@
-import { CharacterRepository } from "../../frameworks/CharacterRepository";
 import { Enemy } from "../../domain/Enemy";
 import { Battle } from "../../domain/Battle";
 import { Character } from "../../domain/Character";
+import { ICharacterRepository } from "../ports/CharacterRepository";
 
 export class FightEnemy {
-    constructor(private characterRepo: CharacterRepository) {}
+    constructor(private characterRepo: ICharacterRepository) {}
 
     async execute(
         enemy: Enemy

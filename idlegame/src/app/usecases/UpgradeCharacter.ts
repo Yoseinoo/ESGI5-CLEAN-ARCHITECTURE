@@ -1,8 +1,8 @@
-import { CharacterRepository } from "../../frameworks/CharacterRepository";
 import { Character } from "../../domain/Character";
+import { ICharacterRepository } from "../ports/CharacterRepository";
 
 export class UpgradeCharacter {
-    constructor(private characterRepo: CharacterRepository) {}
+    constructor(private characterRepo: ICharacterRepository) {}
 
     async execute(): Promise<{ success: boolean; character: Character }> {
         const character = await this.characterRepo.getCharacter(1);
