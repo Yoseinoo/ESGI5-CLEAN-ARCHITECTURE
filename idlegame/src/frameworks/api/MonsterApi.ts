@@ -1,4 +1,4 @@
-import { IMonsterRepository } from "../../app/ports/MonsterRepository";
+import { IMonsterRepository } from "../../app/ports/IMonsterRepository";
 
 const monsterCache: Record<number, any[]> = {}; // store monster lists by CR
 

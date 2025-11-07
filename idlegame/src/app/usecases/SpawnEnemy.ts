@@ -1,6 +1,6 @@
 import { Enemy } from "../../domain/Enemy";
 import { GameProgress } from "./GameProgress";
-import { IMonsterRepository } from "../ports/MonsterRepository";
+import { IMonsterRepository } from "../ports/IMonsterRepository";
 
 export class SpawnEnemy {
     constructor(

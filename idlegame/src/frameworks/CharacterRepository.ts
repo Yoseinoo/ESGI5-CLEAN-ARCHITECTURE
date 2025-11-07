@@ -1,6 +1,6 @@
 import { db, CharacterRecord } from "./db";
 import { Character } from "../domain/Character";
-import { ICharacterRepository } from "../app/ports/CharacterRepository";
+import { ICharacterRepository } from "../app/ports/ICharacterRepository";
 
 export class CharacterRepository implements ICharacterRepository {
     async getCharacter(id: number): Promise<Character | null> {

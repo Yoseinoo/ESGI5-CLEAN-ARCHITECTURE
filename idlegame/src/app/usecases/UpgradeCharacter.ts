@@ -1,5 +1,5 @@
 import { Character } from "../../domain/Character";
-import { ICharacterRepository } from "../ports/CharacterRepository";
+import { ICharacterRepository } from "../ports/ICharacterRepository";
 
 export class UpgradeCharacter {
     constructor(private characterRepo: ICharacterRepository) {}

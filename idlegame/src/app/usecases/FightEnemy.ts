@@ -1,7 +1,7 @@
 import { Enemy } from "../../domain/Enemy";
 import { Battle } from "../../domain/Battle";
 import { Character } from "../../domain/Character";
-import { ICharacterRepository } from "../ports/CharacterRepository";
+import { ICharacterRepository } from "../ports/ICharacterRepository";
 
 export class FightEnemy {
     constructor(private characterRepo: ICharacterRepository) {}
