@@ -50,7 +50,7 @@ export class Character {
     }
 
     buyFullHeal(): boolean {
-        const cost = 25;
+        const cost = 50;
         if (this.gold < cost) return false;
         this.gold -= cost;
         this.healToFull();
@@ -70,7 +70,7 @@ export class Character {
     }
 
     getHealCost(): number {
-        return 25;
+        return 50;
     }
 
     isDead(): boolean {

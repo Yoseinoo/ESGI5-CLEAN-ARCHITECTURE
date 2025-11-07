@@ -1,7 +1,7 @@
 import { MonsterData } from "../../app/dto/MonsterData";
 import { IMonsterRepository } from "../../app/ports/IMonsterRepository";
 
-const monsterCache: Record<number, any[]> = {}; // store monster lists by CR
+const monsterCache: Record<number, MonsterData[]> = {}; // store monster lists by CR
 
 export class MonsterApiRepository implements IMonsterRepository {
     async fetchRandomMonster(
@@ -48,7 +48,7 @@ export class MonsterApiRepository implements IMonsterRepository {
 
         // Step 2 : Pick a random monster from cached list
         const randomMonster = monsters[Math.floor(Math.random() * monsters.length)];
-        console.log(`fetching monster details for monster: ${randomMonster.index}`);
+        //console.log(`fetching monster details for monster: ${randomMonster.index}`);
 
         // Step 3 : Fetch monster details
         const data = await fetch(

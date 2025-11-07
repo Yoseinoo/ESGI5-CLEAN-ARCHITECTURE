@@ -46,7 +46,6 @@ export default function App() {
         if (!enemy || !character) return;
 
         const result = await fightUseCase.execute(enemy);
-        console.log(result.character);
         setCharacter(result.character);
 
         // 💀 Player died ➜ Reset game
@@ -178,6 +177,7 @@ export default function App() {
                             r.success ? "✨ Healed to full!" : "❗ Not enough gold"
                         );
                     }}
+                    disabled={character.hp === character.maxHp}
                 >
                     🌿 Full Heal ({character.getHealCost()}g)
                 </button>
