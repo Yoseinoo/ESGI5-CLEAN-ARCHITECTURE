@@ -1,4 +1,4 @@
-import { fetchRandomMonster } from "../../frameworks/api/MonsterApi";
+import { clearMonsterCache, fetchRandomMonster } from "../../frameworks/api/MonsterApi";
 import { Enemy } from "../../domain/Enemy";
 import { GameProgress } from "./GameProgress";
 
@@ -22,5 +22,6 @@ export class SpawnEnemy {
 
     reset() {
         this.gameProgress.reset();
+        clearMonsterCache();
     }
 }

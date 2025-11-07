@@ -37,7 +37,7 @@ export default function App() {
 
         if (result.win) {
             setLog(`✅ Defeated ${enemy.name}! +${result.earned} gold`);
-            setEnemy(await spawnEnemyUseCase.execute()); // 👈 new monster every win
+            setEnemy(await spawnEnemyUseCase.execute());
         } else {
             setLog(`❌ You lost against ${enemy.name}...`);
 
