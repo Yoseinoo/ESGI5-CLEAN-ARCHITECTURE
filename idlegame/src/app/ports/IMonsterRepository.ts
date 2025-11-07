@@ -1,6 +1,6 @@
-import { MonsterDTO } from "../../frameworks/api/MonsterApi";
+import { MonsterData } from "../dto/MonsterData";
 
 export interface IMonsterRepository {
-    fetchRandomMonster(challengeRating: number): Promise<MonsterDTO>;
+    fetchRandomMonster(challengeRating: number): Promise<MonsterData>;
     clearMonsterCache(): void;
 }

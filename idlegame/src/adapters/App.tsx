@@ -8,9 +8,11 @@ import { Enemy } from "../domain/Enemy";
 import { ResetCharacter } from "../app/usecases/ResetCharacter";
 import { GameProgress } from "../app/usecases/GameProgress";
 import { MonsterApiRepository } from "../frameworks/api/MonsterApi";
+import { InitGame } from "../app/usecases/InitGame";
 
 const repo = new CharacterRepository();
 const monsterRepo = new MonsterApiRepository();
+const initGameUseCase = new InitGame(repo);
 const fightUseCase = new FightEnemy(repo);
 const gameProgress = new GameProgress();
 const spawnEnemyUseCase = new SpawnEnemy(monsterRepo, gameProgress);
@@ -24,7 +26,7 @@ export default function App() {
 
     useEffect(() => {
         async function init() {
-            const char = await repo.initDefaultCharacter();
+            const char = await initGameUseCase.execute();
             setCharacter(char);
             setEnemy(await spawnEnemyUseCase.execute());
         }

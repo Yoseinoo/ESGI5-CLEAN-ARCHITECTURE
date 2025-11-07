@@ -26,15 +26,6 @@ export class CharacterRepository implements ICharacterRepository {
         await db.characters.put(record);
     }
 
-    async initDefaultCharacter(): Promise<Character> {
-        let char = await this.getCharacter(1);
-        if (!char) {
-            char = new Character(1, "Knight");
-            await this.saveCharacter(char);
-        }
-        return char;
-    }
-
     async resetCharacter(): Promise<Character> {
         // Create a fresh character with default stats
         const char = new Character(1, "Knight"); // Level 1, default attack, default gold

@@ -1,17 +1,12 @@
+import { MonsterData } from "../../app/dto/MonsterData";
 import { IMonsterRepository } from "../../app/ports/IMonsterRepository";
 
 const monsterCache: Record<number, any[]> = {}; // store monster lists by CR
 
-export interface MonsterDTO {
-    name: string;
-    hit_points: number;
-    strength: number;
-}
-
 export class MonsterApiRepository implements IMonsterRepository {
     async fetchRandomMonster(
         challengeRating: number
-    ): Promise<MonsterDTO> {
+    ): Promise<MonsterData> {
         // Step 1 : Get (or find fallback for) a valid monster list
         if (!monsterCache[challengeRating]) {
             console.log(`Fetching monster list for CR ${challengeRating}`);
