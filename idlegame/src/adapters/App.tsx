@@ -36,26 +36,49 @@ export default function App() {
     }, []);
 
     const processFight = useCallback(async () => {
-        if (!enemy) return;
+        if (!enemy || !character) return;
 
         const result = await fightUseCase.execute(enemy);
+        console.log(result.character);
         setCharacter(result.character);
 
-        if (result.win) {
-            setLog(`✅ Defeated ${enemy.name}! +${result.earned} gold`);
-            setEnemy(await spawnEnemyUseCase.execute());
-        } else {
-            setLog(`❌ You lost against ${enemy.name}...`);
+        // 💀 Player died ➜ Reset game
+        if (result.character.isDead()) {
+            setLog(`💀 You died against ${enemy.name}... Game reset!`);
 
-            // RESET CHARACTER
             const reset = await resetUseCase.execute();
             setCharacter(reset.character);
 
-            // Spawn a new enemy after reset
-            spawnEnemyUseCase.reset(); // rounds & challenge rating reset
+            spawnEnemyUseCase.reset();
             setEnemy(await spawnEnemyUseCase.execute());
+
+            // Pause idle interaction
+            setIsIdle(false);
+            return;
         }
-    }, [enemy]);
+
+        // Enemy died ➜ reward + next enemy
+        if (result.win) {
+            setLog(`✅ Defeated ${enemy.name}! +${result.earned} gold`);
+            setEnemy(await spawnEnemyUseCase.execute());
+            return;
+        }
+
+        // Both still alive ➜ continue same fight
+        setLog(
+            `⚔ You hit each other! Enemy HP: ${enemy.hp - character.attack}`
+        );
+        // Recreate Enemy instance so methods stay available
+        setEnemy(
+            new Enemy(
+                enemy.id,
+                enemy.name,
+                enemy.hp,
+                enemy.attack,
+                enemy.reward
+            )
+        ); // trigger UI update
+    }, [enemy, character]);
 
     const upgrade = async () => {
         const result = await upgradeUseCase.execute();
@@ -80,6 +103,9 @@ export default function App() {
     return (
         <div className="max-w-md mx-auto mt-10 p-4 border rounded-lg shadow-lg space-y-4">
             <h1 className="text-2xl font-bold">⚔ Hero: {character.name}</h1>
+            <p>
+                ❤️ HP: {character.hp} / {character.maxHp}
+            </p>
             <p>Level: {character.level}</p>
             <p>Attack: {character.attack}</p>
             <p>Gold: {character.gold}</p>
@@ -87,7 +113,7 @@ export default function App() {
             <hr />
 
             <h2 className="text-xl font-bold">👹 Enemy: {enemy.name}</h2>
-            <p>HP: {enemy.hp}</p>
+            <p>❤️ HP: {enemy.hp}</p>
             <p>Attack: {enemy.attack}</p>
             <p>Reward: {enemy.reward} gold</p>
 

@@ -7,7 +7,7 @@ export class InitGame {
     async execute(): Promise<Character> {
         let char = await this.characterRepo.getCharacter(1);
         if (!char) {
-            char = new Character(1, "Knight");
+            char = new Character("Knight");
             await this.characterRepo.saveCharacter(char);
         }
         return char;

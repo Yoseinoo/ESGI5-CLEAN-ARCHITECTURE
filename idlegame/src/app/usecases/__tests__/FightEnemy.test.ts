@@ -6,7 +6,7 @@ import { ICharacterRepository } from "../../ports/ICharacterRepository";
 import { Battle } from "../../../domain/Battle";
 
 class InMemoryCharacterRepo implements ICharacterRepository {
-    private character = new Character(1, "Knight", 1, 10, 0);
+    private character = new Character("Knight", 1, 100, 10, 0);
     async getCharacter(id: number) {
         return this.character;
     }

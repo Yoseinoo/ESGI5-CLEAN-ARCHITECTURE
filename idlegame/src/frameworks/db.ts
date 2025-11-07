@@ -5,6 +5,8 @@ export interface CharacterRecord {
     id?: number;
     name: string;
     level: number;
+    maxHp: number;
+    hp: number;
     attack: number;
     gold: number;
 }

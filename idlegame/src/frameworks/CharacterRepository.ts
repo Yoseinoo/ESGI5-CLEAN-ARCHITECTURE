@@ -7,9 +7,10 @@ export class CharacterRepository implements ICharacterRepository {
         const data = await db.characters.get(id);
         if (!data) return null;
         return new Character(
-            data.id!,
             data.name,
             data.level,
+            data.maxHp,
+            data.hp,
             data.attack,
             data.gold
         );
@@ -20,6 +21,8 @@ export class CharacterRepository implements ICharacterRepository {
             id: character.id,
             name: character.name,
             level: character.level,
+            maxHp: character.maxHp,
+            hp: character.hp,
             attack: character.attack,
             gold: character.gold,
         };
@@ -28,7 +31,7 @@ export class CharacterRepository implements ICharacterRepository {
 
     async resetCharacter(): Promise<Character> {
         // Create a fresh character with default stats
-        const char = new Character(1, "Knight"); // Level 1, default attack, default gold
+        const char = new Character("Knight"); // Level 1, default attack, default gold
         await this.saveCharacter(char); // save it to DB
         return char;
     }

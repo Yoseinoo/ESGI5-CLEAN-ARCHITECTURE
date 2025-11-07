@@ -7,7 +7,7 @@ class InMemoryCharacterRepo implements ICharacterRepository {
     private character: Character;
 
     constructor(character?: Character) {
-        this.character = character ?? new Character(1, "Knight", 1, 5, 20);
+        this.character = character ?? new Character("Knight", 1, 100, 100, 5, 20);
     }
     resetCharacter(): Promise<Character> {
         throw new Error("Method not implemented.");

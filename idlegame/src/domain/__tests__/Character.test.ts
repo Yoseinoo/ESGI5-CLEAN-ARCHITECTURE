@@ -2,7 +2,7 @@ import { Character } from "../Character";
 
 describe("Character Domain", () => {
     it("should upgrade if enough gold", () => {
-        const char = new Character(1, "Hero", 1, 30, 20); // level 1, gold 20
+        const char = new Character("Hero", 1, 100, 100, 30, 20); // level 1, gold 20
 
         const success = char.upgrade();
 
@@ -13,7 +13,7 @@ describe("Character Domain", () => {
     });
 
     it("should not upgrade if not enough gold", () => {
-        const char = new Character(1, "Hero", 1, 30, 5); // level 1, gold 5
+        const char = new Character("Hero", 1, 100, 100, 30, 5); // level 1, gold 5
 
         const success = char.upgrade();
 
@@ -24,7 +24,7 @@ describe("Character Domain", () => {
     });
 
     it("should calculate upgrade cost correctly", () => {
-        const char = new Character(1, "Hero", 1, 30, 50);
+        const char = new Character("Hero", 1, 100, 100, 30, 50);
 
         expect(char.getUpgradeCost()).toBe(10); // level 1 -> 10
         char.level = 5;
@@ -32,7 +32,7 @@ describe("Character Domain", () => {
     });
 
     it("multiple upgrades work correctly", () => {
-        const char = new Character(1, "Hero", 1, 30, 100);
+        const char = new Character("Hero", 1, 100, 100, 30, 100);
 
         let success = char.upgrade(); // level 1 -> 2
         expect(success).toBe(true);
