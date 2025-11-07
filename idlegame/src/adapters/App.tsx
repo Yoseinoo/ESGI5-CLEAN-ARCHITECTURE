@@ -9,6 +9,9 @@ import { ResetCharacter } from "../app/usecases/ResetCharacter";
 import { GameProgress } from "../app/usecases/GameProgress";
 import { MonsterApiRepository } from "../frameworks/api/MonsterApi";
 import { InitGame } from "../app/usecases/InitGame";
+import { UpgradeCharacterAttack } from "../app/usecases/UpgradeCharacterAttack";
+import { UpgradeCharacterHealth } from "../app/usecases/UpgradeCharacterHealth";
+import { BuyCharacterHeal } from "../app/usecases/BuyCharacterHeal";
 
 const repo = new CharacterRepository();
 const monsterRepo = new MonsterApiRepository();
@@ -17,6 +20,10 @@ const fightUseCase = new FightEnemy(repo);
 const gameProgress = new GameProgress();
 const spawnEnemyUseCase = new SpawnEnemy(monsterRepo, gameProgress);
 const upgradeUseCase = new UpgradeCharacter(repo);
+const upgradeAttack = new UpgradeCharacterAttack(repo);
+const upgradeHealth = new UpgradeCharacterHealth(repo);
+const buyHeal = new BuyCharacterHeal(repo);
+
 const resetUseCase = new ResetCharacter(repo);
 
 export default function App() {
@@ -80,14 +87,6 @@ export default function App() {
         ); // trigger UI update
     }, [enemy, character]);
 
-    const upgrade = async () => {
-        const result = await upgradeUseCase.execute();
-        setCharacter(result.character);
-        setLog(
-            result.success ? "⚡ Upgrade successful!" : "❗ Not enough gold"
-        );
-    };
-
     useEffect(() => {
         if (!isIdle) return;
 
@@ -124,12 +123,63 @@ export default function App() {
                 >
                     ⚔ Fight
                 </button>
+            </div>
+
+            <div className="flex gap-2">
                 <button
                     className="px-4 py-2 bg-blue-500 text-white rounded"
-                    onClick={upgrade}
-                    disabled={character.gold < character.getUpgradeCost()}
+                    onClick={async () => {
+                        const result = await upgradeUseCase.execute();
+                        setCharacter(result.character);
+                        setLog(
+                            result.success
+                                ? "⚡ Upgrade successful!"
+                                : "❗ Not enough gold"
+                        );
+                    }}
                 >
                     ⬆ Upgrade ({character.getUpgradeCost()} gold)
+                </button>
+
+                <button
+                    className="px-4 py-2 bg-yellow-500 text-white rounded"
+                    onClick={async () => {
+                        const r = await upgradeAttack.execute();
+                        setCharacter(r.character);
+                        setLog(
+                            r.success ? "⚔ Attack upgraded!" : "❗ Not enough gold"
+                        );
+                    }}
+                >
+                    ⚔ Upgrade Attack ({character.getAttackUpgradeCost()}g)
+                </button>
+
+                <button
+                    className="px-4 py-2 bg-green-500 text-white rounded"
+                    onClick={async () => {
+                        const r = await upgradeHealth.execute();
+                        setCharacter(r.character);
+                        setLog(
+                            r.success
+                                ? "❤️ Health upgraded!"
+                                : "❗ Not enough gold"
+                        );
+                    }}
+                >
+                    ❤️ Upgrade HP ({character.getHealthUpgradeCost()}g)
+                </button>
+
+                <button
+                    className="px-4 py-2 bg-red-500 text-white rounded"
+                    onClick={async () => {
+                        const r = await buyHeal.execute();
+                        setCharacter(r.character);
+                        setLog(
+                            r.success ? "✨ Healed to full!" : "❗ Not enough gold"
+                        );
+                    }}
+                >
+                    🌿 Full Heal ({character.getHealCost()}g)
                 </button>
             </div>
 

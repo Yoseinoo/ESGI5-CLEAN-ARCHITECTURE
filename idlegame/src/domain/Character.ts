@@ -4,7 +4,6 @@ export class Character {
     public maxHp: number;
 
     constructor(
-        //public id: number = 1,
         public name: string,
         public level: number = 1,
         maxHp: number = 50,
@@ -29,13 +28,49 @@ export class Character {
         if (this.gold < cost) return false;
         this.gold -= cost;
         this.level += 1;
-        this.maxHp += 30;
-        this.attack += 20;
+        this.maxHp += 10;
+        this.attack += 5;
+        return true;
+    }
+
+    upgradeAttack(): boolean {
+        const cost = this.level * 15;
+        if (this.gold < cost) return false;
+        this.gold -= cost;
+        this.attack += 10;
+        return true;
+    }
+
+    upgradeHealth(): boolean {
+        const cost = this.level * 12;
+        if (this.gold < cost) return false;
+        this.gold -= cost;
+        this.maxHp += 20;
+        return true;
+    }
+
+    buyFullHeal(): boolean {
+        const cost = 25;
+        if (this.gold < cost) return false;
+        this.gold -= cost;
+        this.healToFull();
         return true;
     }
 
     getUpgradeCost(): number {
         return this.level * 10;
+    }
+
+    getAttackUpgradeCost(): number {
+        return this.level * 15;
+    }
+
+    getHealthUpgradeCost(): number {
+        return this.level * 12;
+    }
+
+    getHealCost(): number {
+        return 25;
     }
 
     isDead(): boolean {
